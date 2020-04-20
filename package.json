@@ -101,7 +101,6 @@
     "eslint-plugin-react": "^7.13.0",
     "gh-pages": "^2.0.1",
     "husky": "^2.3.0",
-    "jest-puppeteer": "^4.2.0",
     "jsdom-global": "^3.0.2",
     "less": "^3.9.0",
     "lint-staged": "^8.1.7",
