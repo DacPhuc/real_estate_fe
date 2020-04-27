@@ -9,6 +9,12 @@ export default [
         icon: 'smile',
         component: './Welcome',
       },
+      {
+        path: '/example',
+        name: 'example',
+        icon: 'smile',
+        component: './ExamplePage',
+      },
     ],
   },
 ];
