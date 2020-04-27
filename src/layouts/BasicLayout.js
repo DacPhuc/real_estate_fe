@@ -23,16 +23,7 @@ const BasicLayout = props => {
    * constructor
    */
 
-  useState(() => {
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
-      dispatch({
-        type: 'settings/getSetting',
-      });
-    }
-  });
+  useState(() => {});
   /**
    * init variables
    */
