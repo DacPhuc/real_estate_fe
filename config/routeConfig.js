@@ -5,14 +5,14 @@ export default [
     routes: [
       {
         path: '/',
-        name: 'welcome',
+        name: 'home',
         icon: 'smile',
-        component: './Welcome',
+        component: './HomePage',
       },
       {
-        path: '/example',
-        name: 'example',
-        icon: 'smile',
+        path: '/estate/detail',
+        name: 'estate',
+        icon: 'solution',
         component: './ExamplePage',
       },
     ],
