@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import { connect } from 'dva';
 import { Modal } from 'antd';
-import style from './index.less';
 
 @connect(({ estate, loading }) => ({
   estate,
