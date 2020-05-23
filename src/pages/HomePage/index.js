@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Divider, Tag, Button } from 'antd';
 import MapLocation from '../MapLocation';
+import DetailModal from '../DetailModal';
 import { connect } from 'dva';
 import style from './index.less';
 
@@ -27,6 +28,12 @@ const columns = (handleShowMap, loadingFetchMap) => [
     title: 'Price',
     dataIndex: 'price',
     key: 'price',
+    render: text => <p>{text}</p>,
+  },
+  {
+    title: 'Contact',
+    dataIndex: 'phone',
+    key: 'contact',
     render: text => <p>{text}</p>,
   },
   {
@@ -85,6 +92,7 @@ export default class HomePage extends Component {
     const { list, totalElement, numberOfElements, popUpShowMap, geoLocation } = estate;
     return (
       <div>
+        <MapLocation visible={popUpShowMap} geoLocation={geoLocation} />
         <Table
           columns={columns(this.handleShowMap, loadingGetMap)}
           dataSource={list}
@@ -92,7 +100,6 @@ export default class HomePage extends Component {
           onChange={this.handleChangePage}
           loading={loadingGetData}
         />
-        <MapLocation visible={popUpShowMap} geoLocation={geoLocation} />
       </div>
     );
   }

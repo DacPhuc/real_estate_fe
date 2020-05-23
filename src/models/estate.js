@@ -8,6 +8,7 @@ export default {
     totalElement: 0,
     numberOfElements: 10,
     popUpShowMap: false,
+    popUpShowDetail: false,
     geoLocation: {},
   },
 
