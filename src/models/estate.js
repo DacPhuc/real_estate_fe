@@ -10,6 +10,7 @@ export default {
     popUpShowMap: false,
     popUpShowDetail: false,
     geoLocation: {},
+    currentEstate: {},
   },
 
   // Effect use when call request outside
@@ -27,6 +28,13 @@ export default {
       yield put({
         type: 'saveLocation',
         payload: response.results[0],
+      });
+    },
+
+    *setCurrentEstate({ payload }, { call, put }) {
+      yield put({
+        type: 'saveEstate',
+        payload: payload,
       });
     },
 
@@ -55,6 +63,19 @@ export default {
       return {
         ...state,
         popUpShowMap: false,
+      };
+    },
+    saveEstate(state, action) {
+      return {
+        ...state,
+        currentEstate: action.payload,
+        popUpShowDetail: true,
+      };
+    },
+    toggleShowDetail(state) {
+      return {
+        ...state,
+        popUpShowDetail: false,
       };
     },
   },

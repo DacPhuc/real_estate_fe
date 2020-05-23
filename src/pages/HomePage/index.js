@@ -5,7 +5,7 @@ import DetailModal from '../DetailModal';
 import { connect } from 'dva';
 import style from './index.less';
 
-const columns = (handleShowMap, loadingFetchMap) => [
+const columns = (handleShowMap, loadingFetchMap, showDetailEstate) => [
   {
     title: 'id',
     dataIndex: 'index',
@@ -49,7 +49,9 @@ const columns = (handleShowMap, loadingFetchMap) => [
           >
             View on map
           </Button>
-          <Button type="primary">Detail</Button>
+          <Button type="primary" onClick={e => showDetailEstate(e, record)}>
+            Detail
+          </Button>
         </div>
       );
     },
@@ -87,18 +89,46 @@ export default class HomePage extends Component {
     });
   };
 
+  showDetailEstate = (e, estate) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'estate/setCurrentEstate',
+      payload: estate,
+    });
+  };
+
+  handleToggleShowDetail = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'estate/toggleShowDetail',
+    });
+  };
+
   render() {
     const { estate, loadingGetData, loadingGetMap } = this.props;
-    const { list, totalElement, numberOfElements, popUpShowMap, geoLocation } = estate;
+    const {
+      list,
+      totalElement,
+      numberOfElements,
+      popUpShowMap,
+      geoLocation,
+      popUpShowDetail,
+      currentEstate,
+    } = estate;
     return (
       <div>
-        <MapLocation visible={popUpShowMap} geoLocation={geoLocation} />
         <Table
-          columns={columns(this.handleShowMap, loadingGetMap)}
+          columns={columns(this.handleShowMap, loadingGetMap, this.showDetailEstate)}
           dataSource={list}
           pagination={{ pageSize: numberOfElements, total: totalElement }}
           onChange={this.handleChangePage}
           loading={loadingGetData}
+        />
+        <MapLocation visible={popUpShowMap} geoLocation={geoLocation} />
+        <DetailModal
+          visible={popUpShowDetail}
+          estate={currentEstate}
+          handleToggleShowDetail={this.handleToggleShowDetail}
         />
       </div>
     );
