@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Table, Divider, Tag, Button } from 'antd';
 import MapLocation from '../MapLocation';
 import { connect } from 'dva';
+import style from './index.less';
 
 const columns = (handleShowMap, loadingFetchMap) => [
   {
@@ -33,13 +34,16 @@ const columns = (handleShowMap, loadingFetchMap) => [
     key: 'action',
     render: (value, record) => {
       return (
-        <Button
-          onClick={e => handleShowMap(e, record.index)}
-          loading={loadingFetchMap}
-          type="primary"
-        >
-          View on map
-        </Button>
+        <div className={style.action}>
+          <Button
+            onClick={e => handleShowMap(e, record.index)}
+            loading={loadingFetchMap}
+            type="primary"
+          >
+            View on map
+          </Button>
+          <Button type="primary">Detail</Button>
+        </div>
       );
     },
   },
