@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Table, Divider, Tag } from 'antd';
+import { Table, Divider, Tag, Button } from 'antd';
+import MapLocation from '../MapLocation';
 import { connect } from 'dva';
 
-const columns = [
+const columns = (handleShowMap, loadingFetchMap) => [
   {
     title: 'id',
     dataIndex: 'index',
@@ -27,17 +28,34 @@ const columns = [
     key: 'price',
     render: text => <p>{text}</p>,
   },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (value, record) => {
+      return (
+        <Button
+          onClick={e => handleShowMap(e, record.index)}
+          loading={loadingFetchMap}
+          type="primary"
+        >
+          View on map
+        </Button>
+      );
+    },
+  },
 ];
 
 @connect(({ estate, loading }) => ({
   estate,
   loadingGetData: loading.effects['estate/getEstate'],
+  loadingGetMap: loading.effects['estate/getGeolocation'],
 }))
 export default class HomePage extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'estate/getEstate',
+      // pagination
       payload: { page: 0, pageSize: 10 },
     });
   }
@@ -50,17 +68,28 @@ export default class HomePage extends Component {
     });
   };
 
+  handleShowMap = (e, id) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'estate/getGeolocation',
+      payload: { id },
+    });
+  };
+
   render() {
-    const { estate, loadingGetData } = this.props;
-    const { list, totalElement, numberOfElements } = estate;
+    const { estate, loadingGetData, loadingGetMap } = this.props;
+    const { list, totalElement, numberOfElements, popUpShowMap, geoLocation } = estate;
     return (
-      <Table
-        columns={columns}
-        dataSource={list}
-        pagination={{ pageSize: numberOfElements, total: totalElement }}
-        onChange={this.handleChangePage}
-        loading={loadingGetData}
-      />
+      <div>
+        <Table
+          columns={columns(this.handleShowMap, loadingGetMap)}
+          dataSource={list}
+          pagination={{ pageSize: numberOfElements, total: totalElement }}
+          onChange={this.handleChangePage}
+          loading={loadingGetData}
+        />
+        <MapLocation visible={popUpShowMap} geoLocation={geoLocation} />
+      </div>
     );
   }
 }

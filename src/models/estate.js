@@ -1,4 +1,4 @@
-import { query } from '../services/estate';
+import { query, getGeolocation } from '../services/estate';
 
 export default {
   namespace: 'estate',
@@ -7,6 +7,8 @@ export default {
     list: [],
     totalElement: 0,
     numberOfElements: 10,
+    popUpShowMap: false,
+    geoLocation: {},
   },
 
   // Effect use when call request outside
@@ -18,6 +20,16 @@ export default {
         payload: response.result,
       });
     },
+
+    *getGeolocation({ payload }, { call, put }) {
+      const response = yield call(getGeolocation, payload.id);
+      yield put({
+        type: 'saveLocation',
+        payload: response.results[0],
+      });
+    },
+
+    *closeMapView({ payload }, { call, put }) {},
   },
 
   // Reducer use to update props
@@ -29,6 +41,19 @@ export default {
         list: response.content,
         totalElement: response.totalElements,
         numberOfElements: response.size,
+      };
+    },
+    saveLocation(state, action) {
+      return {
+        ...state,
+        geoLocation: action.payload,
+        popUpShowMap: true,
+      };
+    },
+    closeMapView(state, action) {
+      return {
+        ...state,
+        popUpShowMap: false,
       };
     },
   },

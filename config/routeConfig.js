@@ -9,12 +9,6 @@ export default [
         icon: 'smile',
         component: './HomePage',
       },
-      {
-        path: '/map',
-        name: 'map',
-        icon: 'smile',
-        component: './MapLocation',
-      },
     ],
   },
 ];

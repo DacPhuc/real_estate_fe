@@ -1,23 +1,36 @@
 import React, { Component } from 'react';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import { connect } from 'dva';
+import { Modal } from 'antd';
 
 @connect(({ estate, loading }) => ({
   estate,
-  loadingGetData: loading.effects['estate/getEstate'],
 }))
 class MapLocation extends Component {
+  handleCloseMapView = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'estate/closeMapView',
+    });
+  };
+
   render() {
-    return (
-      <Map
-        google={this.props.google}
-        zoom={8}
-        style={{ width: '100%', height: '100vh' }}
-        initialCenter={{ lat: 47.444, lng: -122.176 }}
-      >
-        <Marker position={{ lat: 48.0, lng: -122.0 }} />
-      </Map>
-    );
+    const { visible, geoLocation, closeMapview } = this.props;
+    const { geometry } = geoLocation;
+    return visible ? (
+      <Modal visible={visible} style={{ height: '100vh' }} onCancel={this.handleCloseMapView}>
+        <div>
+          <Map
+            google={this.props.google}
+            style={{ width: '100%', height: '500px' }}
+            initialCenter={{ lat: geometry.location.lat, lng: geometry.location.lng }}
+            zoom={15}
+          >
+            <Marker position={{ lat: geometry.location.lat, lng: geometry.location.lng }} />
+          </Map>
+        </div>
+      </Modal>
+    ) : null;
   }
 }
 
