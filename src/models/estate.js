@@ -11,6 +11,7 @@ export default {
     popUpShowDetail: false,
     geoLocation: {},
     currentEstate: {},
+    currentId: 0,
   },
 
   // Effect use when call request outside
@@ -24,10 +25,12 @@ export default {
     },
 
     *getGeolocation({ payload }, { call, put }) {
-      const response = yield call(getGeolocation, payload.id);
+      const { id } = payload;
+      const response = yield call(getGeolocation, id);
+
       yield put({
         type: 'saveLocation',
-        payload: response.results[0],
+        payload: { result: response.results[0], id },
       });
     },
 
@@ -39,6 +42,10 @@ export default {
     },
 
     *closeMapView({ payload }, { call, put }) {},
+
+    // *getMapDetail({payload},{call,put}){
+    //   const res
+    // }
   },
 
   // Reducer use to update props
@@ -53,10 +60,12 @@ export default {
       };
     },
     saveLocation(state, action) {
+      const { payload } = action;
       return {
         ...state,
-        geoLocation: action.payload,
+        geoLocation: payload.result,
         popUpShowMap: true,
+        currentId: payload.id,
       };
     },
     closeMapView(state, action) {
