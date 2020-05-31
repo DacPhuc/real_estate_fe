@@ -115,7 +115,6 @@ export default class HomePage extends Component {
       popUpShowDetail,
       currentEstate,
     } = estate;
-
     return (
       <div>
         <Table
