@@ -10,31 +10,11 @@ import {
   Marker,
 } from 'react-google-maps';
 import human from '../../assets/human.svg';
+import house from '../../assets/house.png';
 import { connect } from 'dva';
 import { Modal } from 'antd';
 
-// var icons = {
-//   const start= new google.maps.makeMarker(
-//    // URL
-//    'start.png',
-//    // (width,height)
-//    new google.maps.Size( 44, 32 ),
-//    // The origin point (x,y)
-//    new google.maps.Point( 0, 0 ),
-//    // The anchor point (x,y)
-//    new google.maps.Point( 22, 32 )
-//   ),
-//   end: new google.maps.MarkerImage(
-//    // URL
-//    'end.png',
-//    // (width,height)
-//    new google.maps.Size( 44, 32 ),
-//    // The origin point (x,y)
-//    new google.maps.Point( 0, 0 ),
-//    // The anchor point (x,y)
-//    new google.maps.Point( 22, 32 )
-//   )
-//  };
+
 
 @connect(({ estate, loading }) => ({
   estate,
@@ -47,12 +27,17 @@ class Map extends Component {
       clicked: false,
       infor: props,
       direction: null,
+      rs:true,
     };
   }
   DirectShow = (e, geometry) => {
+    // this.setState({
+    //   rs: true
+    // })
     const directionsService = new google.maps.DirectionsService();
-    const origin = { lat: geometry.location.lat, lng: geometry.location.lng };
-    const destination = { lat: 10.823099, lng: 106.629662 };
+    const directionsRender = new google.maps.DirectionsRenderer();
+    const destination = { lat: geometry.location.lat, lng: geometry.location.lng };
+    const origin = { lat: 10.823099, lng: 106.629662, text:"This is where you are stading" };
 
     directionsService.route(
       {
@@ -61,14 +46,15 @@ class Map extends Component {
         travelMode: google.maps.TravelMode.DRIVING,
         // preserveViewport: true
       },
-      (result, status) => {
+      (response, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
           this.setState({
-            directions: result,
+            direction: response,
           });
-          // var leg = directions.routes[0].legs[0];
-          // makeMarker( leg.start_location, icons.start, "title" );
-          // console.log(result)
+          var display = new google.maps.DirectionsRenderer({preserveViewport:true})
+
+          console.log("Route")
+          console.log(response)
         } else {
           console.error(`error fetching directions ${result}`);
         }
@@ -101,15 +87,18 @@ class Map extends Component {
     const GoogleMapExample = withGoogleMap(props => (
       <GoogleMap zoom={7} defaultCenter={{ lat: 10.823099, lng: 106.629662 }}>
         <Marker
+          visible = {this.state.rs}
           position={{ lat: geometry.location.lat, lng: geometry.location.lng }}
+          icon= {{
+            url:house,
+            scaledSize:new window.google.maps.Size(50, 50),
+          }}
           onClick={e => this.setPoint(e, geometry)}
         ></Marker>
         <Marker
           position={{ lat: 10.823099, lng: 106.629662 }}
           icon={{
-            disableDefaultUI: true,
             url: human,
-            anchor: new google.maps.Point(5, 58),
             scaledSize: new window.google.maps.Size(25, 25),
           }}
           onClick={e => this.DirectShow(e, geometry)}
@@ -117,7 +106,7 @@ class Map extends Component {
 
         {this.state.clicked && (
           <InfoWindow
-            onClick={e => this.setPoint(e, geometry)}
+            // onClick={e => this.setPoint(e, geometry)}
             position={{
               lat: geometry.location.lat,
               lng: geometry.location.lng,
@@ -138,7 +127,20 @@ class Map extends Component {
             </div>
           </InfoWindow>
         )}
-        <DirectionsRenderer directions={this.state.directions} />
+        <DirectionsRenderer 
+          directions={this.state.direction}
+          
+          options={{
+            polylineOptions: {
+              stokeColor: "#FF0000",
+              strokeOpacity: 0.5,
+              strokeWeight: 4
+            },
+            // markerOptions: { icon: human },
+            suppressMarkers : true,
+            // icon: { scale: 3 }
+          }}
+        />
       </GoogleMap>
     ));
     return { popUpShowMap } ? (
