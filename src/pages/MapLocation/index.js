@@ -1,19 +1,72 @@
+/*global google*/
 import React, { Component } from 'react';
-import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
+import {
+  withGoogleMap,
+  withjs,
+  withScriptjs,
+  GoogleMap,
+  DirectionsRenderer,
+  InfoWindow,
+  Marker,
+} from 'react-google-maps';
+import human from '../../assets/human.svg';
+import house from '../../assets/house.png';
 import { connect } from 'dva';
 import { Modal } from 'antd';
+
+
 
 @connect(({ estate, loading }) => ({
   estate,
 }))
-class MapLocation extends Component {
+class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
       point: null,
+      clicked: false,
       infor: props,
+      direction: null,
+      rs:true,
     };
   }
+  DirectShow = (e, geometry) => {
+    // this.setState({
+    //   rs: true
+    // })
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRender = new google.maps.DirectionsRenderer();
+    const destination = { lat: geometry.location.lat, lng: geometry.location.lng };
+    const origin = { lat: 10.823099, lng: 106.629662, text:"This is where you are stading" };
+
+    directionsService.route(
+      {
+        origin: origin,
+        destination: destination,
+        travelMode: google.maps.TravelMode.DRIVING,
+        // preserveViewport: true
+      },
+      (response, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+          this.setState({
+            direction: response,
+          });
+          var display = new google.maps.DirectionsRenderer({preserveViewport:true})
+
+          console.log("Route")
+          console.log(response)
+        } else {
+          console.error(`error fetching directions ${result}`);
+        }
+      }
+    );
+  };
+  setPoint = (e, geometry) => {
+    this.setState({
+      point: geometry,
+      clicked: true,
+    });
+  };
 
   handleCloseMapView = () => {
     const { dispatch } = this.props;
@@ -21,49 +74,48 @@ class MapLocation extends Component {
       type: 'estate/closeMapView',
     });
   };
-  setPoint = (e, geometry) => {
-    this.setState({
-      point: geometry,
-    });
-  };
+
   render() {
-    const { visible, geoLocation, closeMapview, estate } = this.props;
+    // const [selectedPark, setSelectedPark] = useState(null);
+    const { closeMapview, estate } = this.props;
+    const { popUpShowMap, geoLocation } = estate;
     const { geometry } = geoLocation;
     const { point } = this.state;
     const { list } = estate;
     const { currentId } = estate;
-    console.log(estate);
     const filter = list.filter(para => para.index == currentId)[0];
-    return visible ? (
-      <Modal
-        visible={visible}
-        style={{ top: 20 }}
-        onCancel={this.handleCloseMapView}
-        width={500}
-        bodyStyle={{ padding: 0 }}
-        footer={null}
-      >
-        <Map
-          google={this.props.google}
-          style={{ width: '500px', height: '500px' }}
-          initialCenter={{ lat: geometry.location.lat, lng: geometry.location.lng }}
-          zoom={15}
-        >
-          <Marker
-            position={{ lat: geometry.location.lat, lng: geometry.location.lng }}
-            onClick={e => this.setPoint(e, geometry)}
-          />
+    const GoogleMapExample = withGoogleMap(props => (
+      <GoogleMap zoom={7} defaultCenter={{ lat: 10.823099, lng: 106.629662 }}>
+        <Marker
+          visible = {this.state.rs}
+          position={{ lat: geometry.location.lat, lng: geometry.location.lng }}
+          icon= {{
+            url:house,
+            scaledSize:new window.google.maps.Size(50, 50),
+          }}
+          onClick={e => this.setPoint(e, geometry)}
+        ></Marker>
+        <Marker
+          position={{ lat: 10.823099, lng: 106.629662 }}
+          icon={{
+            url: human,
+            scaledSize: new window.google.maps.Size(25, 25),
+          }}
+          onClick={e => this.DirectShow(e, geometry)}
+        ></Marker>
+
+        {this.state.clicked && (
           <InfoWindow
-            onClose={this.onInfoWindowClose}
-            visible={true}
+            // onClick={e => this.setPoint(e, geometry)}
             position={{
               lat: geometry.location.lat,
               lng: geometry.location.lng,
             }}
           >
             <div>
-              <h2>{filter.title}</h2>
+              <h2> {filter.title} </h2>
               <p>
+                {' '}
                 Address: {filter.addr_ward} {filter.addr_street} {filter.addr_city}{' '}
                 {filter.addr_district}
               </p>
@@ -74,12 +126,49 @@ class MapLocation extends Component {
               </a>
             </div>
           </InfoWindow>
-        </Map>
+        )}
+        <DirectionsRenderer 
+          directions={this.state.direction}
+          
+          options={{
+            polylineOptions: {
+              stokeColor: "#FF0000",
+              strokeOpacity: 0.5,
+              strokeWeight: 4
+            },
+            // markerOptions: { icon: human },
+            suppressMarkers : true,
+            // icon: { scale: 3 }
+          }}
+        />
+      </GoogleMap>
+    ));
+    return { popUpShowMap } ? (
+      <Modal
+        visible={popUpShowMap}
+        style={{ top: 20 }}
+        onCancel={this.handleCloseMapView}
+        width={500}
+        bodyStyle={{ padding: 0 }}
+        footer={null}
+      >
+        <GoogleMapExample
+          containerElement={<div style={{ height: `500px`, width: '500px' }} />}
+          mapElement={<div style={{ height: `100%` }} />}
+        />
       </Modal>
     ) : null;
   }
 }
+const App = () => {
+  console.log(MapLoader);
+  const MapLoader = withScriptjs(Map);
 
-export default GoogleApiWrapper({
-  apiKey: 'AIzaSyCCV-Z0WSK9z5bTLUTZ13s5YVz6I-b2_oE',
-})(MapLocation);
+  return (
+    <MapLoader
+      googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCV-Z0WSK9z5bTLUTZ13s5YVz6I-b2_oE"
+      loadingElement={<div style={{ height: `100%` }} />}
+    />
+  );
+};
+export default App;
