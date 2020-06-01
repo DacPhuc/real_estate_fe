@@ -9,6 +9,12 @@ export default [
         icon: 'smile',
         component: './HomePage',
       },
+      {
+        path: '/test',
+        name: 'socket',
+        icon: 'smile',
+        component: './TestSocket',
+      },
     ],
   },
 ];
