@@ -14,8 +14,6 @@ import house from '../../assets/house.png';
 import { connect } from 'dva';
 import { Modal } from 'antd';
 
-
-
 @connect(({ estate, loading }) => ({
   estate,
 }))
@@ -27,34 +25,27 @@ class Map extends Component {
       clicked: false,
       infor: props,
       direction: null,
-      rs:true,
+      rs: true,
     };
   }
   DirectShow = (e, geometry) => {
-    // this.setState({
-    //   rs: true
-    // })
     const directionsService = new google.maps.DirectionsService();
     const directionsRender = new google.maps.DirectionsRenderer();
     const destination = { lat: geometry.location.lat, lng: geometry.location.lng };
-    const origin = { lat: 10.823099, lng: 106.629662, text:"This is where you are stading" };
+    const origin = { lat: 10.823099, lng: 106.629662, text: 'This is where you are stading' };
 
     directionsService.route(
       {
         origin: origin,
         destination: destination,
         travelMode: google.maps.TravelMode.DRIVING,
-        // preserveViewport: true
       },
       (response, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
           this.setState({
             direction: response,
           });
-          var display = new google.maps.DirectionsRenderer({preserveViewport:true})
-
-          console.log("Route")
-          console.log(response)
+          var display = new google.maps.DirectionsRenderer({ preserveViewport: true });
         } else {
           console.error(`error fetching directions ${result}`);
         }
@@ -76,7 +67,6 @@ class Map extends Component {
   };
 
   render() {
-    // const [selectedPark, setSelectedPark] = useState(null);
     const { closeMapview, estate } = this.props;
     const { popUpShowMap, geoLocation } = estate;
     const { geometry } = geoLocation;
@@ -85,13 +75,13 @@ class Map extends Component {
     const { currentId } = estate;
     const filter = list.filter(para => para.index == currentId)[0];
     const GoogleMapExample = withGoogleMap(props => (
-      <GoogleMap zoom={7} defaultCenter={{ lat: 10.823099, lng: 106.629662 }}>
+      <GoogleMap zoom={15} defaultCenter={{ lat: 10.823099, lng: 106.629662 }}>
         <Marker
-          visible = {this.state.rs}
+          visible={this.state.rs}
           position={{ lat: geometry.location.lat, lng: geometry.location.lng }}
-          icon= {{
-            url:house,
-            scaledSize:new window.google.maps.Size(50, 50),
+          icon={{
+            url: house,
+            scaledSize: new window.google.maps.Size(50, 50),
           }}
           onClick={e => this.setPoint(e, geometry)}
         ></Marker>
@@ -115,7 +105,6 @@ class Map extends Component {
             <div>
               <h2> {filter.title} </h2>
               <p>
-                {' '}
                 Address: {filter.addr_ward} {filter.addr_street} {filter.addr_city}{' '}
                 {filter.addr_district}
               </p>
@@ -127,23 +116,20 @@ class Map extends Component {
             </div>
           </InfoWindow>
         )}
-        <DirectionsRenderer 
+        <DirectionsRenderer
           directions={this.state.direction}
-          
           options={{
             polylineOptions: {
-              stokeColor: "#FF0000",
+              stokeColor: '#FF0000',
               strokeOpacity: 0.5,
-              strokeWeight: 4
+              strokeWeight: 4,
             },
-            // markerOptions: { icon: human },
-            suppressMarkers : true,
-            // icon: { scale: 3 }
+            suppressMarkers: true,
           }}
         />
       </GoogleMap>
     ));
-    return { popUpShowMap } ? (
+    return popUpShowMap ? (
       <Modal
         visible={popUpShowMap}
         style={{ top: 20 }}
@@ -161,7 +147,6 @@ class Map extends Component {
   }
 }
 const App = () => {
-  console.log(MapLoader);
   const MapLoader = withScriptjs(Map);
 
   return (
