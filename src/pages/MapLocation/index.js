@@ -12,7 +12,7 @@ import {
 import human from '../../assets/human.svg';
 import house from '../../assets/house.png';
 import { connect } from 'dva';
-import { Modal } from 'antd';
+import { Modal, Tooltip } from 'antd';
 
 @connect(({ estate, loading }) => ({
   estate,
@@ -25,7 +25,6 @@ class Map extends Component {
       clicked: false,
       infor: props,
       direction: null,
-      rs: true,
     };
   }
   DirectShow = (e, geometry) => {
@@ -45,7 +44,6 @@ class Map extends Component {
           this.setState({
             direction: response,
           });
-          var display = new google.maps.DirectionsRenderer({ preserveViewport: true });
         } else {
           console.error(`error fetching directions ${result}`);
         }
@@ -77,14 +75,14 @@ class Map extends Component {
     const GoogleMapExample = withGoogleMap(props => (
       <GoogleMap zoom={15} defaultCenter={{ lat: 10.823099, lng: 106.629662 }}>
         <Marker
-          visible={this.state.rs}
+          visible={true}
           position={{ lat: geometry.location.lat, lng: geometry.location.lng }}
           icon={{
             url: house,
             scaledSize: new window.google.maps.Size(50, 50),
           }}
           onClick={e => this.setPoint(e, geometry)}
-        ></Marker>
+        />
         <Marker
           position={{ lat: 10.823099, lng: 106.629662 }}
           icon={{
@@ -92,11 +90,9 @@ class Map extends Component {
             scaledSize: new window.google.maps.Size(25, 25),
           }}
           onClick={e => this.DirectShow(e, geometry)}
-        ></Marker>
-
+        />
         {this.state.clicked && (
           <InfoWindow
-            // onClick={e => this.setPoint(e, geometry)}
             position={{
               lat: geometry.location.lat,
               lng: geometry.location.lng,
