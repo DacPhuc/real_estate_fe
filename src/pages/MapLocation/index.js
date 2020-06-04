@@ -14,7 +14,7 @@ import house from '../../assets/house.png';
 import { connect } from 'dva';
 import { Modal } from 'antd';
 
-@connect(({ estate, loading }) => ({
+@connect(({ estate }) => ({
   estate,
 }))
 class Map extends Component {
@@ -29,10 +29,14 @@ class Map extends Component {
     };
   }
   DirectShow = (e, geometry) => {
+    const { estate } = this.props;
+    const { currentCoordinate } = estate;
+    const lat = parseFloat(currentCoordinate.lat);
+    const lng = parseFloat(currentCoordinate.lng);
     const directionsService = new google.maps.DirectionsService();
     const directionsRender = new google.maps.DirectionsRenderer();
     const destination = { lat: geometry.location.lat, lng: geometry.location.lng };
-    const origin = { lat: 10.823099, lng: 106.629662, text: 'This is where you are stading' };
+    const origin = { lat: lat, lng: lng, text: 'This is where you are stading' };
 
     directionsService.route(
       {
@@ -46,11 +50,8 @@ class Map extends Component {
             direction: response,
           });
           var display = new google.maps.DirectionsRenderer({ preserveViewport: true });
-
-          console.log('Route');
-          console.log(response);
         } else {
-          console.error(`error fetching directions ${result}`);
+          console.error(`error fetching directions`);
         }
       }
     );
@@ -71,14 +72,16 @@ class Map extends Component {
 
   render() {
     const { closeMapview, estate } = this.props;
-    const { popUpShowMap, geoLocation } = estate;
+    const { popUpShowMap, geoLocation, currentCoordinate } = estate;
+    const lat = parseFloat(currentCoordinate.lat);
+    const lng = parseFloat(currentCoordinate.lng);
     const { geometry } = geoLocation;
     const { point } = this.state;
     const { list } = estate;
     const { currentId } = estate;
     const filter = list.filter(para => para.index == currentId)[0];
     const GoogleMapExample = withGoogleMap(props => (
-      <GoogleMap zoom={15} defaultCenter={{ lat: 10.823099, lng: 106.629662 }}>
+      <GoogleMap zoom={10} defaultCenter={{ lat: lat, lng: lng }}>
         <Marker
           visible={this.state.rs}
           position={{ lat: geometry.location.lat, lng: geometry.location.lng }}
@@ -89,7 +92,7 @@ class Map extends Component {
           onClick={e => this.setPoint(e, geometry)}
         ></Marker>
         <Marker
-          position={{ lat: 10.823099, lng: 106.629662 }}
+          position={{ lat: lat, lng: lng }}
           icon={{
             url: human,
             scaledSize: new window.google.maps.Size(25, 25),
@@ -136,12 +139,12 @@ class Map extends Component {
         visible={popUpShowMap}
         style={{ top: 20 }}
         onCancel={this.handleCloseMapView}
-        width={500}
+        width={800}
         bodyStyle={{ padding: 0 }}
         footer={null}
       >
         <GoogleMapExample
-          containerElement={<div style={{ height: `500px`, width: '500px' }} />}
+          containerElement={<div style={{ height: `800px`, width: '800px' }} />}
           mapElement={<div style={{ height: `100%` }} />}
         />
       </Modal>

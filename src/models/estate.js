@@ -12,6 +12,10 @@ export default {
     geoLocation: {},
     currentEstate: {},
     currentId: 0,
+    currentCoordinate: {
+      lat: 0,
+      lng: 0,
+    },
   },
 
   // Effect use when call request outside
@@ -85,6 +89,13 @@ export default {
       return {
         ...state,
         popUpShowDetail: false,
+      };
+    },
+
+    setCoordinate(state, action) {
+      return {
+        ...state,
+        currentCoordinate: action.payload,
       };
     },
   },
