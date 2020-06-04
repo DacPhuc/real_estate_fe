@@ -12,7 +12,7 @@ import {
 import human from '../../assets/human.svg';
 import house from '../../assets/house.png';
 import { connect } from 'dva';
-import { Modal, Tooltip } from 'antd';
+import { Modal } from 'antd';
 
 @connect(({ estate, loading }) => ({
   estate,
@@ -25,6 +25,7 @@ class Map extends Component {
       clicked: false,
       infor: props,
       direction: null,
+      rs: true,
     };
   }
   DirectShow = (e, geometry) => {
@@ -44,6 +45,10 @@ class Map extends Component {
           this.setState({
             direction: response,
           });
+          var display = new google.maps.DirectionsRenderer({ preserveViewport: true });
+
+          console.log('Route');
+          console.log(response);
         } else {
           console.error(`error fetching directions ${result}`);
         }
@@ -73,7 +78,7 @@ class Map extends Component {
     const { currentId } = estate;
     const filter = list.filter(para => para.index == currentId)[0];
     const GoogleMapExample = withGoogleMap(props => (
-      <GoogleMap zoom={7} defaultCenter={{ lat: 10.823099, lng: 106.629662 }}>
+      <GoogleMap zoom={15} defaultCenter={{ lat: 10.823099, lng: 106.629662 }}>
         <Marker
           visible={this.state.rs}
           position={{ lat: geometry.location.lat, lng: geometry.location.lng }}
