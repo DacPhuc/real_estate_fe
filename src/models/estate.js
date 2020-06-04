@@ -1,4 +1,4 @@
-import { query, getGeolocation, changeLightStatus } from '../services/estate';
+import { query, getGeolocation, changeLight } from '../services/estate';
 
 export default {
   namespace: 'estate',
@@ -46,7 +46,7 @@ export default {
     },
 
     *changeLightStatus({ payload }, { call, put }) {
-      const response = call(changeLightStatus, payload);
+      const response = yield call(changeLight, payload);
     },
   },
 

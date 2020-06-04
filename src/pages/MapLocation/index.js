@@ -81,7 +81,6 @@ class Map extends Component {
 
   changeLightStatus = status => {
     const { dispatch } = this.props;
-    console.log('status' + status);
     dispatch({
       type: 'estate/changeLightStatus',
       payload: status,
