@@ -1,4 +1,4 @@
-import { query, getGeolocation } from '../services/estate';
+import { query, getGeolocation, changeLightStatus } from '../services/estate';
 
 export default {
   namespace: 'estate',
@@ -13,8 +13,8 @@ export default {
     currentEstate: {},
     currentId: 0,
     currentCoordinate: {
-      lat: 0,
-      lng: 0,
+      lat: 10.77653,
+      lng: 106.700981,
     },
   },
 
