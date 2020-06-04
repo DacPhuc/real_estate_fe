@@ -5,7 +5,6 @@ import { Modal, Descriptions } from 'antd';
 export default class DetailModal extends PureComponent {
   render() {
     const { visible, estate, handleToggleShowDetail } = this.props;
-    console.log(estate);
     return visible ? (
       <Modal
         visible={visible}

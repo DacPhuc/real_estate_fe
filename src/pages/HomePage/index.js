@@ -58,6 +58,8 @@ const columns = (handleShowMap, loadingFetchMap, showDetailEstate) => [
   },
 ];
 
+let stompClient;
+
 @connect(({ estate, loading }) => ({
   estate,
   loadingGetData: loading.effects['estate/getEstate'],
@@ -66,12 +68,35 @@ const columns = (handleShowMap, loadingFetchMap, showDetailEstate) => [
 export default class HomePage extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
+    this.connect();
     dispatch({
       type: 'estate/getEstate',
       // pagination
       payload: { page: 0, pageSize: 10 },
     });
   }
+
+  connect = () => {
+    const Stomp = require('stompjs');
+    var SockJS = require('sockjs-client');
+    SockJS = new SockJS('http://localhost:8080/api/ws');
+    console.log(SockJS);
+    stompClient = Stomp.over(SockJS);
+    stompClient.connect({}, this.onConnected, this.onError);
+  };
+
+  onConnected = () => {
+    stompClient.subscribe('/topic/dacphuc', this.onMessageReceived);
+  };
+
+  onMessageReceived = payload => {
+    console.log(payload);
+  };
+
+  onError = error => {
+    console.log('Error when connect to websocket');
+    console.log(error);
+  };
 
   handleChangePage = page => {
     const { dispatch } = this.props;
