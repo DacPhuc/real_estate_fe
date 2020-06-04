@@ -45,11 +45,9 @@ export default {
       });
     },
 
-    *closeMapView({ payload }, { call, put }) {},
-
-    // *getMapDetail({payload},{call,put}){
-    //   const res
-    // }
+    *changeLightStatus({ payload }, { call, put }) {
+      const response = call(changeLightStatus, payload);
+    },
   },
 
   // Reducer use to update props

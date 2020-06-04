@@ -71,6 +71,14 @@ class Map extends Component {
     });
   };
 
+  changeLightStatus = status => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'estate/changeLightStatus',
+      payload: status,
+    });
+  };
+
   render() {
     const { closeMapview, estate } = this.props;
     const { popUpShowMap, geoLocation, currentCoordinate } = estate;

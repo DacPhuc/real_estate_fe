@@ -8,3 +8,7 @@ export async function query(payload) {
 export async function getGeolocation(payload) {
   return request(`/api/estates/geolocation?id=${payload}`);
 }
+
+export async function changeLightStatus(payload) {
+  return request(`/api/estates/light?status=${light}`);
+}
