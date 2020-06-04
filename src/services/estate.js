@@ -10,5 +10,5 @@ export async function getGeolocation(payload) {
 }
 
 export async function changeLightStatus(payload) {
-  return request(`/api/estates/light?status=${light}`);
+  return request(`/api/estates/light?status=${payload}`);
 }
