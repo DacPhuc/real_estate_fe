@@ -90,7 +90,12 @@ export default class HomePage extends Component {
   };
 
   onMessageReceived = payload => {
-    console.log(payload);
+    const { dispatch } = this.props;
+    const coordinate = JSON.parse(payload.body);
+    dispatch({
+      type: 'estate/setCoordinate',
+      payload: coordinate,
+    });
   };
 
   onError = error => {

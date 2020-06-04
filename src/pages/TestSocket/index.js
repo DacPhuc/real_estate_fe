@@ -34,7 +34,7 @@ export default class HomePage extends Component {
   };
 
   onMessageReceived = payload => {
-    console.log('Run this');
+    const mess = JSON.parse(payload.body);
     this.setState({
       message: payload.body,
     });
