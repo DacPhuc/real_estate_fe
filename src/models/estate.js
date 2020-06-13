@@ -46,7 +46,19 @@ export default {
     },
 
     *changeLightStatus({ payload }, { call, put }) {
-      const response = yield call(changeLight, payload);
+      let lightStatus = [];
+      switch (payload) {
+        case 1:
+          lightStatus = [{ device_id: 'Light_D', values: ['1', '100'] }];
+          break;
+        case 2:
+          lightStatus = [{ device_id: 'Light_D', values: ['0', '0'] }];
+          break;
+        default:
+          lightStatus = [{ device_id: 'Light_D', values: ['1', '100'] }];
+          break;
+      }
+      const response = yield call(changeLight, lightStatus);
     },
   },
 
