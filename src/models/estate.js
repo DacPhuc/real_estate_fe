@@ -1,4 +1,4 @@
-import { query, getGeolocation } from '../services/estate';
+import { query, getGeolocation, changeLight } from '../services/estate';
 
 export default {
   namespace: 'estate',
@@ -13,8 +13,8 @@ export default {
     currentEstate: {},
     currentId: 0,
     currentCoordinate: {
-      lat: 0,
-      lng: 0,
+      lat: 10.77653,
+      lng: 106.700981,
     },
   },
 
@@ -45,11 +45,21 @@ export default {
       });
     },
 
-    *closeMapView({ payload }, { call, put }) {},
-
-    // *getMapDetail({payload},{call,put}){
-    //   const res
-    // }
+    *changeLightStatus({ payload }, { call, put }) {
+      let lightStatus = [];
+      switch (payload) {
+        case 1:
+          lightStatus = [{ device_id: 'Light_D', values: ['1', '100'] }];
+          break;
+        case 2:
+          lightStatus = [{ device_id: 'Light_D', values: ['0', '0'] }];
+          break;
+        default:
+          lightStatus = [{ device_id: 'Light_D', values: ['1', '100'] }];
+          break;
+      }
+      const response = yield call(changeLight, lightStatus);
+    },
   },
 
   // Reducer use to update props

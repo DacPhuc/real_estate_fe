@@ -50,6 +50,14 @@ class Map extends Component {
           this.setState({
             direction: response,
           });
+          console.log(response);
+          let distanceobj = response.routes[0].legs[0].distance.value;
+          console.log(distanceobj);
+          if (distanceobj < 10000) {
+            this.changeLightStatus(1);
+          } else {
+            this.changeLightStatus(0);
+          }
           var display = new google.maps.DirectionsRenderer({ preserveViewport: true });
         } else {
           console.error(`error fetching directions`);
@@ -68,6 +76,14 @@ class Map extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'estate/closeMapView',
+    });
+  };
+
+  changeLightStatus = status => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'estate/changeLightStatus',
+      payload: status,
     });
   };
 
