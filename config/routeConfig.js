@@ -10,10 +10,10 @@ export default [
         component: './HomePage',
       },
       {
-        path: '/test',
-        name: 'socket',
+        path: '/login',
+        name: 'Login',
         icon: 'smile',
-        component: './TestSocket',
+        component: './LoginPage',
       },
     ],
   },

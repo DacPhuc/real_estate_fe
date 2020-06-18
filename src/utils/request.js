@@ -44,4 +44,24 @@ const request = extend({
   errorHandler,
   credentials: 'include',
 });
+
+request.interceptors.request.use(async (url, options) => {
+  let token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  };
+
+  let Authorization;
+
+  if (token) {
+    headers['Authorization'] = 'Bearer ' + token;
+  }
+
+  return {
+    url: url,
+    options: { ...options, headers: headers },
+  };
+});
+
 export default request;
