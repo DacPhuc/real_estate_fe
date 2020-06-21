@@ -1,4 +1,6 @@
-import { query, getGeolocation } from '../services/estate';
+import { query, getGeolocation, changeLight, visualize, priceVisual } from '../services/estate';
+import { result } from 'lodash';
+import moment from 'moment';
 
 export default {
   namespace: 'estate',
@@ -12,6 +14,12 @@ export default {
     geoLocation: {},
     currentEstate: {},
     currentId: 0,
+    currentCoordinate: {
+      lat: 10.77653,
+      lng: 106.700981,
+    },
+    visualizeObject: {},
+    visualData: [],
   },
 
   // Effect use when call request outside
@@ -21,6 +29,23 @@ export default {
       yield put({
         type: 'save',
         payload: response.result,
+      });
+    },
+
+    *getPriceVisual({ payload }, { call, put }) {
+      const response = yield call(priceVisual, payload);
+      yield put({
+        type: 'saveVisualData',
+        payload: response,
+      });
+    },
+
+    *getVisualize({ payload }, { call, put }) {
+      const response = yield call(visualize);
+      console.log(response);
+      yield put({
+        type: 'saveVisualize',
+        payload: response,
       });
     },
 
@@ -41,15 +66,33 @@ export default {
       });
     },
 
-    *closeMapView({ payload }, { call, put }) {},
-
-    // *getMapDetail({payload},{call,put}){
-    //   const res
-    // }
+    *changeLightStatus({ payload }, { call, put }) {
+      let lightStatus = [];
+      switch (payload) {
+        case 1:
+          lightStatus = [{ device_id: 'Light_D', values: ['1', '100'] }];
+          break;
+        case 2:
+          lightStatus = [{ device_id: 'Light_D', values: ['0', '0'] }];
+          break;
+        default:
+          lightStatus = [{ device_id: 'Light_D', values: ['1', '100'] }];
+          break;
+      }
+      const response = yield call(changeLight, lightStatus);
+    },
   },
 
   // Reducer use to update props
   reducers: {
+    saveVisualize(state, action) {
+      const response = action.payload;
+      return {
+        ...state,
+        visualizeObject: response,
+      };
+    },
+
     save(state, action) {
       const response = action.payload;
       return {
@@ -74,6 +117,19 @@ export default {
         popUpShowMap: false,
       };
     },
+
+    saveVisualData(state, action) {
+      const data = Object.entries(action.payload);
+      let rechartData = [];
+      data.forEach(ele => {
+        rechartData.push({ date: moment(ele[0]).format('l'), price: ele[1] });
+      });
+      return {
+        ...state,
+        visualData: rechartData,
+      };
+    },
+
     saveEstate(state, action) {
       return {
         ...state,
@@ -85,6 +141,13 @@ export default {
       return {
         ...state,
         popUpShowDetail: false,
+      };
+    },
+
+    setCoordinate(state, action) {
+      return {
+        ...state,
+        currentCoordinate: action.payload,
       };
     },
   },
