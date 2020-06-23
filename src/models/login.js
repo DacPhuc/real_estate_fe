@@ -1,8 +1,9 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
+import { notification } from 'antd';
 import { setAuthority } from '@/utils/authority';
 import { reloadAuthorized } from '@/utils/Authorized';
-import { login as accountLogin } from '@/services/user';
+import { login as accountLogin, accountSignUp } from '@/services/user';
 
 export default {
   namespace: 'login',
@@ -14,37 +15,31 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(accountLogin, payload);
-      // yield put({
-      //   type: 'changeLoginStatus',
-      //   payload: response && response.result,
-      // });
-      // Login successfully
+      console.log(response);
       if (response) {
         localStorage.setItem('token', response);
+        put({
+          type: 'changeLoginStatus',
+        });
         reloadAuthorized();
         yield put(routerRedux.replace('/'));
+        notification.success({
+          message: 'Login successfully',
+        });
       }
     },
 
-    *logout(_, { put }) {
-      yield put({
-        type: 'changeLoginStatus',
-        payload: {
-          status: false,
-          currentAuthority: 'guest',
-        },
-      });
-      reloadAuthorized();
-      // redirect
-      if (window.location.pathname !== '/user/login') {
-        yield put(
-          routerRedux.replace({
-            pathname: '/user/login',
-            search: stringify({
-              redirect: window.location.href,
-            }),
-          })
-        );
+    *signUp({ payload }, { call, put }) {
+      const response = yield call(accountSignUp, payload);
+      console.log(response);
+      if (response) {
+        notification.success({
+          message: 'Sign up successfully',
+        });
+      } else {
+        notification.error({
+          message: 'Username and email must be unique',
+        });
       }
     },
   },
@@ -54,8 +49,7 @@ export default {
       setAuthority('user');
       return {
         ...state,
-        status: payload.status,
-        type: payload.type,
+        status: true,
       };
     },
   },

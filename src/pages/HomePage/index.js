@@ -134,6 +134,14 @@ export default class HomePage extends Component {
     });
   };
 
+  changeLightStatus = (e, status) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'estate/changeLightStatus',
+      payload: status,
+    });
+  };
+
   render() {
     const { estate, loadingGetData, loadingGetMap } = this.props;
     const {
@@ -147,6 +155,13 @@ export default class HomePage extends Component {
     } = estate;
     return (
       <div>
+        <div style={{ marginBottom: '20px' }}>
+          <h1>Control light</h1>
+          <Button style={{ marginRight: '20px' }} onClick={e => this.changeLightStatus(e, 1)}>
+            Turn on light
+          </Button>
+          <Button onClick={e => this.changeLightStatus(e, 2)}>Turn off light</Button>
+        </div>
         <Table
           columns={columns(this.handleShowMap, loadingGetMap, this.showDetailEstate)}
           dataSource={list}
@@ -157,7 +172,7 @@ export default class HomePage extends Component {
         <MapLocation visible={popUpShowMap} geoLocation={geoLocation} />
         <DetailModal
           visible={popUpShowDetail}
-          estate={currentEstate}
+          currentEstate={currentEstate}
           handleToggleShowDetail={this.handleToggleShowDetail}
         />
       </div>

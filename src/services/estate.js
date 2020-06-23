@@ -12,3 +12,11 @@ export async function getGeolocation(payload) {
 export async function changeLight(payload) {
   return request('/api/estates/light', { method: 'POST', data: payload });
 }
+
+export async function postComment(payload) {
+  return request('/api/estate/comment', { method: 'POST', data: payload });
+}
+
+export async function getCommentList(payload) {
+  return request(`api/estate/comment?estate_id=${payload}`);
+}

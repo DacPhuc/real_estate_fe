@@ -1,4 +1,10 @@
-import { query, getGeolocation, changeLight } from '../services/estate';
+import {
+  query,
+  getGeolocation,
+  changeLight,
+  postComment,
+  getCommentList,
+} from '../services/estate';
 
 export default {
   namespace: 'estate',
@@ -16,6 +22,7 @@ export default {
       lat: 10.77653,
       lng: 106.700981,
     },
+    listComment: [],
   },
 
   // Effect use when call request outside
@@ -59,6 +66,22 @@ export default {
           break;
       }
       const response = yield call(changeLight, lightStatus);
+    },
+
+    *postComment({ payload }, { call, put }) {
+      const response = yield call(postComment, payload);
+      yield put({
+        type: 'appendComment',
+        payload: response,
+      });
+    },
+
+    *getListComment({ payload }, { call, put }) {
+      const response = yield call(getCommentList, payload);
+      yield put({
+        type: 'saveCommentList',
+        payload: response,
+      });
     },
   },
 
@@ -106,6 +129,22 @@ export default {
       return {
         ...state,
         currentCoordinate: action.payload,
+      };
+    },
+
+    saveCommentList(state, action) {
+      return {
+        ...state,
+        listComment: action.payload,
+      };
+    },
+
+    appendComment(state, action) {
+      const comments = state.listComment;
+      comments.push(action.payload);
+      return {
+        ...state,
+        listComment: comments,
       };
     },
   },

@@ -14,3 +14,7 @@ export async function queryNotices() {
 export async function login(payload) {
   return request('/api/users/login', { method: 'POST', data: payload });
 }
+
+export async function accountSignUp(payload) {
+  return request('/api/users/sign-up', { method: 'POST', data: payload });
+}

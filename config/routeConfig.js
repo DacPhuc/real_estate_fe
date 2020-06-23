@@ -1,5 +1,17 @@
 export default [
   {
+    path: '/login',
+    component: '../layouts/BlankLayout',
+    routes: [
+      {
+        path: '/login',
+        name: 'Login',
+        icon: 'smile',
+        component: './LoginPage',
+      },
+    ],
+  },
+  {
     path: '/',
     component: '../layouts/BasicLayout',
     routes: [
@@ -8,12 +20,6 @@ export default [
         name: 'home',
         icon: 'smile',
         component: './HomePage',
-      },
-      {
-        path: '/login',
-        name: 'Login',
-        icon: 'smile',
-        component: './LoginPage',
       },
     ],
   },
