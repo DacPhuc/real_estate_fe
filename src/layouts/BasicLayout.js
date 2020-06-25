@@ -5,7 +5,7 @@
  */
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { connect } from 'dva';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from '../assets/logo.svg';
 import Authorized from '@/utils/Authorized';
 import { formatMessage } from 'umi-plugin-react/locale';
@@ -27,6 +27,13 @@ const BasicLayout = props => {
   /**
    * init variables
    */
+  useEffect(() => {
+    console.log('hello cac ban nhe');
+    dispatch &&
+      dispatch({
+        type: 'login/checkAuthentication',
+      });
+  }, []);
 
   const handleMenuCollapse = payload =>
     dispatch &&
@@ -50,7 +57,8 @@ const BasicLayout = props => {
   );
 };
 
-export default connect(({ global, settings }) => ({
+export default connect(({ global, settings, login }) => ({
   collapsed: global.collapsed,
   settings,
+  login,
 }))(BasicLayout);

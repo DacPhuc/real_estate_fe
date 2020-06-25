@@ -3,13 +3,13 @@ import { stringify } from 'qs';
 import { notification } from 'antd';
 import { setAuthority } from '@/utils/authority';
 import { reloadAuthorized } from '@/utils/Authorized';
-import { login as accountLogin, accountSignUp } from '@/services/user';
+import { login as accountLogin, accountSignUp, checkAuthentication } from '@/services/user';
 
 export default {
   namespace: 'login',
 
   state: {
-    status: undefined,
+    status: false,
   },
 
   effects: {
@@ -31,7 +31,6 @@ export default {
 
     *signUp({ payload }, { call, put }) {
       const response = yield call(accountSignUp, payload);
-      console.log(response);
       if (response) {
         notification.success({
           message: 'Sign up successfully',
@@ -42,14 +41,22 @@ export default {
         });
       }
     },
+
+    *checkAuthentication(_, { call, put }) {
+      const response = yield call(checkAuthentication);
+      yield put({
+        type: 'changeLoginStatus',
+        payload: response,
+      });
+    },
   },
 
   reducers: {
-    changeLoginStatus(state, { payload }) {
-      setAuthority('user');
+    changeLoginStatus(state, action) {
+      const isLogin = action.payload;
       return {
         ...state,
-        status: true,
+        status: isLogin ? true : false,
       };
     },
   },

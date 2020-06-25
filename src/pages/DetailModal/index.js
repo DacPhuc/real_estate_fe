@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
+import router from 'umi/router';
 import CommentBox from './CommentBox';
 import CommentInput from './CommentInput';
-import { Modal, Descriptions } from 'antd';
+import { Modal, Descriptions, Result, Button } from 'antd';
 import style from './index.less';
 
-@connect(({ estate, loading }) => ({
+@connect(({ estate, loading, login }) => ({
   estate,
+  login,
 }))
 export default class DetailModal extends Component {
   submitComment = value => {
@@ -18,7 +20,8 @@ export default class DetailModal extends Component {
   };
 
   render() {
-    const { visible, currentEstate, handleToggleShowDetail } = this.props;
+    const { visible, currentEstate, handleToggleShowDetail, login } = this.props;
+    const { status } = login;
     return visible ? (
       <Modal
         visible={visible}
@@ -35,8 +38,27 @@ export default class DetailModal extends Component {
           <Descriptions.Item label="Other information">{currentEstate.title}</Descriptions.Item>
           <Descriptions.Item label="Surrounding">{currentEstate.addr_street}</Descriptions.Item>
         </Descriptions>
-        <CommentBox currentEstate={currentEstate} />
-        <CommentInput estate_id={currentEstate.index} submitComment={this.submitComment} />
+        {status ? (
+          <div>
+            <CommentBox currentEstate={currentEstate} />
+            <CommentInput estate_id={currentEstate.index} submitComment={this.submitComment} />
+          </div>
+        ) : (
+          <Result
+            status="403"
+            subTitle="Please sign up or login to perform this action"
+            extra={
+              <Button
+                type="primary"
+                onClick={() => {
+                  router.push('/login');
+                }}
+              >
+                Sign up/Login
+              </Button>
+            }
+          />
+        )}
       </Modal>
     ) : null;
   }

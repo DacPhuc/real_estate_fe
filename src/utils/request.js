@@ -46,6 +46,7 @@ request.interceptors.request.use(async (url, options) => {
   const headers = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
+    Authorization: 'Bearer ' + 'dacphuc',
   };
 
   let Authorization;

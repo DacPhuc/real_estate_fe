@@ -18,3 +18,7 @@ export async function login(payload) {
 export async function accountSignUp(payload) {
   return request('/api/users/sign-up', { method: 'POST', data: payload });
 }
+
+export async function checkAuthentication() {
+  return request('/api/users/check');
+}
