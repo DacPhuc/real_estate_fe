@@ -17,24 +17,33 @@ class FormLogin extends Component {
   };
 
   render() {
-    const { form } = this.props;
+    const { form, loading } = this.props;
     const { getFieldDecorator } = form;
     return (
-      <Form>
-        <Form.Item>
+      <div className={styles.main}>
+        <div className={styles.text}>LOGIN</div>
+        <Form.Item label="User Name">
           {getFieldDecorator('name', {
             rules: [{ required: true, message: 'Please input your email!' }],
-          })(<Input prefix={<Icon type="user" />} placeholder="Name" />)}
+          })(<Input size="large" prefix={<Icon type="user" />} placeholder="Name" />)}
         </Form.Item>
-        <Form.Item>
+        <Form.Item label="Password">
           {getFieldDecorator('password', {
             rules: [{ required: true, message: 'Please input your Password!' }],
-          })(<Input prefix={<Icon type="lock" />} type="password" placeholder="Password" />)}
+          })(
+            <Input
+              size="large"
+              prefix={<Icon type="lock" />}
+              type="password"
+              placeholder="Password"
+              onPressEnter={this.handleSubmit}
+            />
+          )}
         </Form.Item>
-        <Button type="primary" onClick={this.handleSubmit}>
+        <Button onClick={this.handleSubmit} loading={loading} className={styles.btw} size="large">
           Log in
         </Button>
-      </Form>
+      </div>
     );
   }
 }

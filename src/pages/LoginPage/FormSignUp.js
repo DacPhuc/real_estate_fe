@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, Checkbox } from 'antd';
+import { Button, Col, Form, Input, Row, Checkbox, Icon } from 'antd';
 import React, { Component } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
@@ -17,11 +17,32 @@ class FormSignUp extends Component {
   };
 
   render() {
-    const { form } = this.props;
+    const { form, loading } = this.props;
     const { getFieldDecorator } = form;
     return (
-      <Form>
-        <Form.Item>
+      <div className={styles.main}>
+        <div className={styles.textSignUp}>NEW AT REAL ESTATE?</div>
+        <div className={styles.signUpMessage}>
+          <p>
+            <Icon
+              type="heart"
+              theme="twoTone"
+              twoToneColor="#eb2f96"
+              style={{ marginLeft: '10px', marginRight: '20px' }}
+            />
+            Access advance feature
+          </p>
+          <p>
+            <Icon
+              type="heart"
+              theme="twoTone"
+              twoToneColor="#eb2f96"
+              style={{ marginLeft: '10px', marginRight: '20px' }}
+            />
+            Be part of the beneficial REAL ESTATE
+          </p>
+        </div>
+        <Form.Item label="User Name">
           {getFieldDecorator('name', {
             rules: [
               {
@@ -29,9 +50,9 @@ class FormSignUp extends Component {
                 message: 'Please input your username.',
               },
             ],
-          })(<Input placeholder="User Name" />)}
+          })(<Input prefix={<Icon type="user" />} size="large" placeholder="User Name" />)}
         </Form.Item>
-        <Form.Item>
+        <Form.Item label="Email">
           {getFieldDecorator('email', {
             rules: [
               {
@@ -39,9 +60,9 @@ class FormSignUp extends Component {
                 message: 'Please input your email.',
               },
             ],
-          })(<Input placeholder="Email" />)}
+          })(<Input prefix={<Icon type="mail" />} size="large" placeholder="Email" />)}
         </Form.Item>
-        <Form.Item>
+        <Form.Item label="Password">
           {getFieldDecorator('password', {
             rules: [
               {
@@ -49,10 +70,20 @@ class FormSignUp extends Component {
                 message: 'Please input your password.',
               },
             ],
-          })(<Input placeholder="Password" type="password" onPressEnter={this.handleSubmit} />)}
+          })(
+            <Input
+              prefix={<Icon type="lock" />}
+              size="large"
+              placeholder="Password"
+              type="password"
+              onPressEnter={this.handleSubmit}
+            />
+          )}
         </Form.Item>
-        <Button onClick={this.handleSubmit}>Sign up</Button>
-      </Form>
+        <Button onClick={this.handleSubmit} loading={loading} className={styles.btw} size="large">
+          Sign up
+        </Button>
+      </div>
     );
   }
 }

@@ -1,7 +1,7 @@
 export default [
   {
     path: '/login',
-    component: '../layouts/BlankLayout',
+    component: '../layouts/UserLayout',
     routes: [
       {
         path: '/login',

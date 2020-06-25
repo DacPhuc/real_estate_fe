@@ -1,6 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
 import { notification } from 'antd';
+import router from 'umi/router';
 import { setAuthority } from '@/utils/authority';
 import { reloadAuthorized } from '@/utils/Authorized';
 import { login as accountLogin, accountSignUp, checkAuthentication } from '@/services/user';
