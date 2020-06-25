@@ -30,7 +30,6 @@
     }
   },
   "lint-staged": {
-    "**/*.less": "stylelint --syntax less",
     "**/*.{js,jsx}": "npm run lint-staged:js",
     "**/*.{js,jsx,tsx,ts,less,md,json}": [
       "prettier --write",
@@ -133,7 +132,6 @@
   "checkFiles": [
     "src/**/*.js*",
     "src/**/*.ts*",
-    "src/**/*.less",
     "config/**/*.js*",
     "scripts/**/*.js"
   ]
