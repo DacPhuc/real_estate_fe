@@ -22,12 +22,6 @@ export default [
         component: './HomePage',
       },
       {
-        path: '/login',
-        name: 'Login',
-        icon: 'smile',
-        component: './LoginPage',
-      },
-      {
         path: '/visualize',
         name: 'Real Estate Charts',
         icon: 'smile',
