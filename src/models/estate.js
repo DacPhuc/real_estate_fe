@@ -1,4 +1,12 @@
-import { query, getGeolocation, changeLight, visualize, priceVisual } from '../services/estate';
+import {
+  query,
+  getGeolocation,
+  changeLight,
+  visualize,
+  priceVisual,
+  getCommentList,
+  postComment,
+} from '../services/estate';
 import { result } from 'lodash';
 import moment from 'moment';
 

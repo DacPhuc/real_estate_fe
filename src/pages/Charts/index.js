@@ -4,9 +4,7 @@ import { connect } from 'dva';
 import { Select } from 'antd';
 import LineChartVisual from './LineChartVisual';
 import estate from '@/models/estate';
-import example from '@/models/example';
 import { visualize } from '@/services/estate';
-import { tuple } from 'antd/lib/_util/type';
 const { Option } = Select;
 
 // Connect with model example
@@ -90,6 +88,7 @@ export default class Charts extends Component {
 
     return (
       <div>
+        <h2>Select field value to show price chart base on location</h2>
         <div>
           <Select style={{ width: 120 }} onChange={this.changeCity}>
             {city &&

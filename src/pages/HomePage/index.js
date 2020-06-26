@@ -31,6 +31,12 @@ const columns = (handleShowMap, loadingFetchMap, showDetailEstate) => [
     render: text => <p>{text}</p>,
   },
   {
+    title: 'Unit',
+    dataIndex: 'price_unit',
+    key: 'price',
+    render: text => <p>{text}</p>,
+  },
+  {
     title: 'Contact',
     dataIndex: 'phone',
     key: 'contact',

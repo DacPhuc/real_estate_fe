@@ -38,6 +38,7 @@ export default class DetailModal extends Component {
           <Descriptions.Item label="Other information">{currentEstate.title}</Descriptions.Item>
           <Descriptions.Item label="Surrounding">{currentEstate.addr_street}</Descriptions.Item>
         </Descriptions>
+        <h2>Review about this estate</h2>
         {status ? (
           <div>
             <CommentBox currentEstate={currentEstate} />

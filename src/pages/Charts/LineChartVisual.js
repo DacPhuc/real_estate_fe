@@ -1,24 +1,27 @@
 import React, { PureComponent } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import moment from 'moment';
+import { array } from 'prop-types';
 
 export default class LineChartVisual extends PureComponent {
   render() {
     const { data } = this.props;
-    console.log(data);
+    data.sort((a, b) => {
+      return new Date(a.date) - new Date(b.date);
+    });
     return (
       <LineChart
-        width={500}
-        height={300}
+        width={1400}
+        height={800}
         data={data}
         margin={{
-          top: 5,
+          top: 20,
           right: 30,
           left: 20,
           bottom: 5,
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid />
         <XAxis dataKey="date" />
         <YAxis dataKey="price" />
         <Tooltip />
