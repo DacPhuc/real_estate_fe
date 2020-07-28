@@ -28,7 +28,6 @@ const BasicLayout = props => {
    * init variables
    */
   useEffect(() => {
-    console.log('hello cac ban nhe');
     dispatch &&
       dispatch({
         type: 'login/checkAuthentication',
@@ -49,6 +48,7 @@ const BasicLayout = props => {
       menuItemRender={(menuItemProps, defaultDom) => {
         return <Link to={menuItemProps.path}>{defaultDom}</Link>;
       }}
+      rightContentRender={rightProps => <RightContent {...rightProps} />}
       {...props}
       {...settings}
     >

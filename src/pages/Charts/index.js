@@ -30,33 +30,25 @@ export default class Charts extends Component {
     });
   }
 
-  handleChange = value => {
-    console.log(`select ${value}`);
-  };
-
   changeCity = value => {
-    console.log(value);
     this.setState({
       selectedCity: value,
     });
   };
 
   handleTransaction = value => {
-    console.log(value);
     this.setState({
       selectedTransaction: value,
     });
   };
 
   handleEstate = value => {
-    console.log(value);
     this.setState({
       selectedEstate: value,
     });
   };
 
   handleDistrict = value => {
-    console.log(value);
     this.setState({
       selectedDist: value,
     });

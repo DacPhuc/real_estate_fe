@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Table, Divider, Tag, Button } from 'antd';
 import MapLocation from '../MapLocation';
 import DetailModal from '../DetailModal';
+import PickLocation from '@/components/PickLocation';
 import { connect } from 'dva';
 import style from './index.less';
 
@@ -167,6 +168,10 @@ export default class HomePage extends Component {
             Turn on light
           </Button>
           <Button onClick={e => this.changeLightStatus(e, 2)}>Turn off light</Button>
+        </div>
+        <div style={{ marginBottom: '20px' }}>
+          <h1>Predict price</h1>
+          <PickLocation />
         </div>
         <Table
           columns={columns(this.handleShowMap, loadingGetMap, this.showDetailEstate)}

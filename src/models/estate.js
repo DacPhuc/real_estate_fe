@@ -51,7 +51,6 @@ export default {
 
     *getVisualize({ payload }, { call, put }) {
       const response = yield call(visualize);
-      console.log(response);
       yield put({
         type: 'saveVisualize',
         payload: response,

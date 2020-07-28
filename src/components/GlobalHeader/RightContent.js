@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Icon, Tooltip } from 'antd';
+import { Icon, Tooltip, Button } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { connect } from 'dva';
+import { router } from 'umi';
 import HeaderSearch from '../HeaderSearch';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
@@ -18,45 +19,16 @@ class GlobalHeaderRight extends Component {
 
     return (
       <div className={className}>
-        <HeaderSearch
-          className={`${styles.action} ${styles.search}`}
-          placeholder={formatMessage({
-            id: 'component.globalHeader.search',
-          })}
-          dataSource={[
-            formatMessage({
-              id: 'component.globalHeader.search.example1',
-            }),
-            formatMessage({
-              id: 'component.globalHeader.search.example2',
-            }),
-            formatMessage({
-              id: 'component.globalHeader.search.example3',
-            }),
-          ]}
-          onSearch={value => {
-            console.log('input', value); // tslint:disable-line no-console
+        <Button
+          type="primary"
+          icon="login"
+          className={styles.login}
+          onClick={() => {
+            router.push('/login');
           }}
-          onPressEnter={value => {
-            console.log('enter', value); // tslint:disable-line no-console
-          }}
-        />
-        <Tooltip
-          title={formatMessage({
-            id: 'component.globalHeader.help',
-          })}
         >
-          <a
-            target="_blank"
-            href="https://pro.ant.design/docs/getting-started"
-            rel="noopener noreferrer"
-            className={styles.action}
-          >
-            <Icon type="question-circle-o" />
-          </a>
-        </Tooltip>
-        <Avatar />
-        <SelectLang className={styles.action} />
+          Sign in
+        </Button>
       </div>
     );
   }

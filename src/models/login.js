@@ -16,7 +16,6 @@ export default {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(accountLogin, payload);
-      console.log(response);
       if (response) {
         localStorage.setItem('token', response);
         put({

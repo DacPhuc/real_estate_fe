@@ -57,7 +57,6 @@ export default class CommentBox extends Component {
 
   onError = error => {
     console.log('Error when connect to websocket');
-    console.log(error);
   };
 
   render() {
