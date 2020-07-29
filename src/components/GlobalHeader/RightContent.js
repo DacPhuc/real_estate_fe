@@ -10,31 +10,34 @@ import Avatar from './AvatarDropdown';
 
 class GlobalHeaderRight extends Component {
   render() {
-    const { theme, layout } = this.props;
+    const { theme, layout, status, loadAuthen } = this.props;
     let className = styles.right;
 
     if (theme === 'dark' && layout === 'topmenu') {
       className = `${styles.right}  ${styles.dark}`;
     }
 
-    return (
+    return !loadAuthen ? (
       <div className={className}>
-        <Button
-          type="primary"
-          icon="login"
-          className={styles.login}
-          onClick={() => {
-            router.push('/login');
-          }}
-        >
-          Sign in
-        </Button>
+        {status ? null : (
+          <Button
+            type="primary"
+            icon="login"
+            className={styles.login}
+            onClick={() => {
+              router.push('/login');
+            }}
+          >
+            Sign in
+          </Button>
+        )}
       </div>
-    );
+    ) : null;
   }
 }
 
-export default connect(({ settings }) => ({
+export default connect(({ settings, login }) => ({
+  status: login.status,
   theme: settings.navTheme,
   layout: settings.layout,
 }))(GlobalHeaderRight);

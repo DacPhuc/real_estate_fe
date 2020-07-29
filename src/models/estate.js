@@ -6,6 +6,7 @@ import {
   priceVisual,
   getCommentList,
   postComment,
+  getPredictionPrice,
 } from '../services/estate';
 import { result } from 'lodash';
 import moment from 'moment';
@@ -29,6 +30,7 @@ export default {
     listComment: [],
     visualizeObject: {},
     visualData: [],
+    predictionPrice: null,
   },
 
   // Effect use when call request outside
@@ -71,6 +73,15 @@ export default {
       yield put({
         type: 'saveEstate',
         payload: payload,
+      });
+    },
+
+    *getPredictionPrice({ payload }, { call, put }) {
+      const response = yield call(getPredictionPrice, payload);
+      const price = response.price;
+      yield put({
+        type: 'savePredictPrice',
+        payload: price.toFix(2),
       });
     },
 
@@ -179,6 +190,13 @@ export default {
       return {
         ...state,
         listComment: action.payload,
+      };
+    },
+
+    savePredictPrice(state, action) {
+      return {
+        ...state,
+        predictionPrice: action.payload,
       };
     },
 

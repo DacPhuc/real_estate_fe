@@ -18,7 +18,7 @@ import Link from 'umi/link';
  */
 
 const BasicLayout = props => {
-  const { dispatch, children, settings } = props;
+  const { dispatch, children, settings, loadAuthen } = props;
   /**
    * constructor
    */
@@ -48,7 +48,7 @@ const BasicLayout = props => {
       menuItemRender={(menuItemProps, defaultDom) => {
         return <Link to={menuItemProps.path}>{defaultDom}</Link>;
       }}
-      rightContentRender={rightProps => <RightContent {...rightProps} />}
+      rightContentRender={rightProps => <RightContent {...rightProps} loadAuthen={loadAuthen} />}
       {...props}
       {...settings}
     >
@@ -57,8 +57,9 @@ const BasicLayout = props => {
   );
 };
 
-export default connect(({ global, settings, login }) => ({
+export default connect(({ global, settings, login, loading }) => ({
   collapsed: global.collapsed,
   settings,
   login,
+  loadAuthen: loading.effects['login/checkAuthentication'],
 }))(BasicLayout);

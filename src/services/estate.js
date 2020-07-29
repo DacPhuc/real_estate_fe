@@ -29,3 +29,7 @@ export async function priceVisual(payload) {
 export async function visualize() {
   return request('/api/estates/visualize');
 }
+
+export async function getPredictionPrice(payload) {
+  return request('/api/estate/predict', { method: 'POST', data: payload });
+}

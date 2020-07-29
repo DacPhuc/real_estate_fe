@@ -81,6 +81,9 @@ export default class HomePage extends Component {
       // pagination
       payload: { page: 0, pageSize: 10 },
     });
+    dispatch({
+      type: 'estate/getVisualize',
+    });
   }
 
   connect = () => {
@@ -159,6 +162,7 @@ export default class HomePage extends Component {
       geoLocation,
       popUpShowDetail,
       currentEstate,
+      visualizeObject,
     } = estate;
     return (
       <div>
@@ -170,8 +174,7 @@ export default class HomePage extends Component {
           <Button onClick={e => this.changeLightStatus(e, 2)}>Turn off light</Button>
         </div>
         <div style={{ marginBottom: '20px' }}>
-          <h1>Predict price</h1>
-          <PickLocation />
+          <PickLocation locationData={visualizeObject} />
         </div>
         <Table
           columns={columns(this.handleShowMap, loadingGetMap, this.showDetailEstate)}

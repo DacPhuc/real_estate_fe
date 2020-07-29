@@ -17,7 +17,7 @@ export default [
     routes: [
       {
         path: '/',
-        name: 'home',
+        name: 'Home',
         icon: 'smile',
         component: './HomePage',
       },
