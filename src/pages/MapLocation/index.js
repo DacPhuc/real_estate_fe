@@ -14,8 +14,7 @@ import house from '../../assets/house.png';
 import car from '../../assets/car.png';
 import { connect } from 'dva';
 import { Modal } from 'antd';
-import { Button, notification } from 'antd';
-import { SmileOutlined } from '@ant-design/icons';
+import { Button, notification, Icon } from 'antd';
 import { Carousel } from 'antd';
 import style from './index.less';
 
@@ -84,7 +83,7 @@ class Map extends Component {
                     </p>
                   </div>
                 ),
-                icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+                icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
               });
             }
           );
