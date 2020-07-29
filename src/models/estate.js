@@ -81,7 +81,7 @@ export default {
       const price = response.price;
       yield put({
         type: 'savePredictPrice',
-        payload: price.toFix(2),
+        payload: price,
       });
     },
 

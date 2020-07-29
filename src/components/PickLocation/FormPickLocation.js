@@ -62,8 +62,8 @@ export default class FormPickLocation extends React.PureComponent {
             {getFieldDecorator('transaction_type', {
               rules: [{ required: true, message: 'Please select transaction type!' }],
             })(
-              <Select placeholder="Transaction Type" style={{ width: 170 }}>
-                <Option value="thuê">Thuê</Option>
+              <Select placeholder="Transaction Type" style={{ width: 160 }}>
+                <Option value="thuê">Mua</Option>
                 <Option value="bán">Bán</Option>
               </Select>
             )}
@@ -72,7 +72,7 @@ export default class FormPickLocation extends React.PureComponent {
             {getFieldDecorator('city', {
               rules: [{ required: true, message: 'Please select city!' }],
             })(
-              <Select placeholder="City" style={{ width: 170 }} onChange={this.changeCity}>
+              <Select placeholder="City" style={{ width: 160 }} onChange={this.changeCity}>
                 <Option value="HồCHíMinh">Hồ Chí Minh</Option>
                 <Option value="HàNội">Hà Nội</Option>
               </Select>
@@ -83,7 +83,7 @@ export default class FormPickLocation extends React.PureComponent {
               {getFieldDecorator('district', {
                 rules: [{ required: true, message: 'Please select district!' }],
               })(
-                <Select placeholder="District" style={{ width: 170 }} disabled={!selectedCity}>
+                <Select placeholder="District" style={{ width: 160 }} disabled={!selectedCity}>
                   {HCM &&
                     HCM.map(ele => {
                       return <Option value={ele}>{ele}</Option>;
@@ -96,7 +96,7 @@ export default class FormPickLocation extends React.PureComponent {
               {getFieldDecorator('district', {
                 rules: [{ required: true, message: 'Please select district!' }],
               })(
-                <Select placeholder="District" style={{ width: 170 }} disabled={!selectedCity}>
+                <Select placeholder="District" style={{ width: 160 }} disabled={!selectedCity}>
                   {HN &&
                     HN.map(ele => {
                       return <Option value={ele}>{ele}</Option>;
@@ -110,11 +110,11 @@ export default class FormPickLocation extends React.PureComponent {
             {getFieldDecorator('real_type', {
               rules: [{ required: true, message: 'Please select estate type!' }],
             })(
-              <Select placeholder="Estate Type" style={{ width: 170 }}>
-                {estate_type &&
-                  estate_type.map(ele => {
-                    return <Option value={ele}>{ele}</Option>;
-                  })}
+              <Select placeholder="Estate Type" style={{ width: 160 }}>
+                <Option value="Đất">Đất</Option>
+                <Option value="Nhà">Nhà</Option>
+                <Option value="Cănhộ">Căn hộ</Option>
+                <Option value="Trọ">Trọ</Option>
               </Select>
             )}
           </Form.Item>
@@ -122,7 +122,7 @@ export default class FormPickLocation extends React.PureComponent {
             {getFieldDecorator('yard', {
               rules: [{ required: true, message: 'Please select this option!' }],
             })(
-              <Select placeholder="Have rooftop" style={{ width: 170 }}>
+              <Select placeholder="Have rooftop" style={{ width: 160 }}>
                 <Option value="0">No</Option>
                 <Option value="1">Yes</Option>
               </Select>
@@ -132,7 +132,7 @@ export default class FormPickLocation extends React.PureComponent {
             {getFieldDecorator('balcony', {
               rules: [{ required: true, message: 'Please select this option!' }],
             })(
-              <Select placeholder="Have balcony" style={{ width: 170 }}>
+              <Select placeholder="Have balcony" style={{ width: 160 }}>
                 <Option value="0">No</Option>
                 <Option value="1">Yes</Option>
               </Select>
@@ -153,7 +153,7 @@ export default class FormPickLocation extends React.PureComponent {
                 },
               ],
             })(
-              <Input placeholder="How many floors" type="number" style={{ width: 170 }} min="0" />
+              <Input placeholder="How many floors" type="number" style={{ width: 160 }} min="0" />
             )}
           </Form.Item>
           <Form.Item>
@@ -170,7 +170,7 @@ export default class FormPickLocation extends React.PureComponent {
                   },
                 },
               ],
-            })(<Input placeholder="How much area" type="number" style={{ width: 170 }} min="0" />)}
+            })(<Input placeholder="How much area" type="number" style={{ width: 160 }} min="0" />)}
           </Form.Item>
           <Form.Item>
             <Button type="primary" onClick={this.submit}>

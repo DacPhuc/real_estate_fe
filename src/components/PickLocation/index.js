@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Checkbox, Icon, Collapse, Result } from 'antd';
+import { Button, Col, Form, Input, Checkbox, Icon, Collapse, Result, Tooltip } from 'antd';
 import React, { Component } from 'react';
 import FormPickLocation from './FormPickLocation';
 import { connect } from 'dva';
@@ -35,6 +35,9 @@ class PickLocation extends Component {
     return (
       <Collapse>
         <Panel header="Predict price" key="1">
+          <Tooltip title="Our model will predict the price base on your choice">
+            <Icon type="question-circle" />
+          </Tooltip>
           {status ? (
             <div>
               <FormPickLocation
