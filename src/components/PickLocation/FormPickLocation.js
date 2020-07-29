@@ -180,6 +180,7 @@ export default class FormPickLocation extends React.PureComponent {
         </div>
         {loadingGetPrice ? <Lottie options={defaultOptions} height={100} width={100} /> : null}
         <div>Price: {price}</div>
+        <div>Unit: tỷ vnđ</div>
       </>
     );
   }

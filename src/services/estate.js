@@ -33,3 +33,7 @@ export async function visualize() {
 export async function getPredictionPrice(payload) {
   return request('/api/estate/predict', { method: 'POST', data: payload });
 }
+
+export async function searchEstate(payload) {
+  return request('/api/estates/search', { method: 'POST', data: payload });
+}

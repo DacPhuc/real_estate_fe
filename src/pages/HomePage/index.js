@@ -3,6 +3,7 @@ import { Table, Divider, Tag, Button } from 'antd';
 import MapLocation from '../MapLocation';
 import DetailModal from '../DetailModal';
 import PickLocation from '@/components/PickLocation';
+import SearchBox from '@/components/SearchBox';
 import { connect } from 'dva';
 import style from './index.less';
 
@@ -176,6 +177,7 @@ export default class HomePage extends Component {
         <div style={{ marginBottom: '20px' }}>
           <PickLocation locationData={visualizeObject} />
         </div>
+        <SearchBox />
         <Table
           columns={columns(this.handleShowMap, loadingGetMap, this.showDetailEstate)}
           dataSource={list}

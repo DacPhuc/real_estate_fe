@@ -146,7 +146,7 @@ class Map extends Component {
     const { point } = this.state;
     const { list } = estate;
     const { currentId } = estate;
-    const filter = list.filter(para => para.index == currentId)[0];
+    const filter = list && list.filter(para => para.index == currentId)[0];
     const GoogleMapExample = withGoogleMap(props => (
       <GoogleMap defaultZoom={15} defaultCenter={{ lat: lat, lng: lng }}>
         <Marker

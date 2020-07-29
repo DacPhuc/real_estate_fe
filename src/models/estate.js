@@ -7,6 +7,7 @@ import {
   getCommentList,
   postComment,
   getPredictionPrice,
+  searchEstate,
 } from '../services/estate';
 import { result } from 'lodash';
 import moment from 'moment';
@@ -116,6 +117,14 @@ export default {
         payload: response,
       });
     },
+
+    *search({ payload }, { call, put }) {
+      const response = yield call(searchEstate, payload);
+      yield put({
+        type: 'saveSearch',
+        payload: response,
+      });
+    },
   },
 
   // Reducer use to update props
@@ -125,6 +134,13 @@ export default {
       return {
         ...state,
         visualizeObject: response,
+      };
+    },
+
+    saveSearch(state, action) {
+      return {
+        ...state,
+        list: action.payload,
       };
     },
 
