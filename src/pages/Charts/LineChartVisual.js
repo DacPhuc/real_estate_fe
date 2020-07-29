@@ -9,7 +9,8 @@ export default class LineChartVisual extends PureComponent {
     data.sort((a, b) => {
       return new Date(a.date) - new Date(b.date);
     });
-    return (
+    console.log(data);
+    return data.length ? (
       <LineChart
         width={1400}
         height={800}
@@ -28,6 +29,6 @@ export default class LineChartVisual extends PureComponent {
         <Legend />
         <Line type="float" dataKey="price" stroke="#8884d8" activeDot={{ r: 8 }} />
       </LineChart>
-    );
+    ) : null;
   }
 }

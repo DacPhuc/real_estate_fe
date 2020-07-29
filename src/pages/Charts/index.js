@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
-import { Descriptions, Badge, Button, notification } from 'antd';
+import { Descriptions, Badge, Button, notification, Collapse, Tooltip, Result, Icon } from 'antd';
 import { connect } from 'dva';
 import { Select } from 'antd';
 import LineChartVisual from './LineChartVisual';
 import estate from '@/models/estate';
 import { visualize } from '@/services/estate';
+import style from './index.less';
 const { Option } = Select;
+const { Panel } = Collapse;
 
 // Connect with model example
-@connect(({ estate, loading }) => ({
+@connect(({ estate, loading, login }) => ({
   estate,
+  login,
   loadingGetData: loading.effects['estate/getVisualize'],
 }))
 export default class Charts extends Component {
@@ -74,55 +77,95 @@ export default class Charts extends Component {
 
   render() {
     const { selectedCity } = this.state;
-    const { estate, loadingGetData } = this.props;
+    const { estate, loadingGetData, login } = this.props;
+    const { status } = login;
     const { visualizeObject, visualData } = estate;
     const { HCM, HN, city, estate_type, transaction_type } = visualizeObject;
 
     return (
       <div>
         <h2>Select field value to show price chart base on location</h2>
-        <div>
-          <Select style={{ width: 120 }} onChange={this.changeCity}>
-            {city &&
-              city.map(ele => {
-                return <Option value={ele}>{ele}</Option>;
-              })}
-          </Select>
+        <Collapse>
+          <Panel header="Price Chart" key="1">
+            {status ? (
+              <div className={style.optionBox}>
+                <Select style={{ width: 200 }} onChange={this.changeCity} placeholder="Choose city">
+                  {city &&
+                    city.map(ele => {
+                      return <Option value={ele}>{ele}</Option>;
+                    })}
+                </Select>
+                {selectedCity === 'Hồ Chí Minh' ? (
+                  <Select
+                    style={{ width: 200 }}
+                    onChange={this.handleDistrict}
+                    disabled={!selectedCity}
+                    placeholder="Choose district"
+                  >
+                    {HCM &&
+                      HCM.map(ele => {
+                        return <Option value={ele}>{ele}</Option>;
+                      })}
+                  </Select>
+                ) : (
+                  <Select
+                    style={{ width: 200 }}
+                    onChange={this.handleDistrict}
+                    disabled={!selectedCity}
+                    placeholder="Choose district"
+                  >
+                    {HN &&
+                      HN.map(ele => {
+                        return <Option value={ele}>{ele}</Option>;
+                      })}
+                  </Select>
+                )}
 
-          {selectedCity === 'Hồ Chí Minh' ? (
-            <Select style={{ width: 120 }} onChange={this.handleDistrict} disabled={!selectedCity}>
-              {HCM &&
-                HCM.map(ele => {
-                  return <Option value={ele}>{ele}</Option>;
-                })}
-            </Select>
-          ) : (
-            <Select style={{ width: 120 }} onChange={this.handleDistrict} disabled={!selectedCity}>
-              {HN &&
-                HN.map(ele => {
-                  return <Option value={ele}>{ele}</Option>;
-                })}
-            </Select>
-          )}
+                <Select
+                  style={{ width: 200 }}
+                  onChange={this.handleTransaction}
+                  placeholder="Choose transaction type"
+                >
+                  {transaction_type &&
+                    transaction_type.map(ele => {
+                      return <Option value={ele}>{ele}</Option>;
+                    })}
+                </Select>
 
-          <Select style={{ width: 120 }} onChange={this.handleTransaction}>
-            {transaction_type &&
-              transaction_type.map(ele => {
-                return <Option value={ele}>{ele}</Option>;
-              })}
-          </Select>
+                <Select
+                  style={{ width: 200 }}
+                  onChange={this.handleEstate}
+                  placeholder="Choose Estate Type"
+                >
+                  {estate_type &&
+                    estate_type.map(ele => {
+                      return <Option value={ele}>{ele}</Option>;
+                    })}
+                </Select>
 
-          <Select style={{ width: 120 }} onChange={this.handleEstate}>
-            {estate_type &&
-              estate_type.map(ele => {
-                return <Option value={ele}>{ele}</Option>;
-              })}
-          </Select>
+                <Button type="primary" onClick={this.showVisual}>
+                  Display
+                </Button>
+              </div>
+            ) : (
+              <Result
+                status="403"
+                subTitle="Please sign up or login to perform this action"
+                extra={
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      router.push('/login');
+                    }}
+                  >
+                    Sign up/Login
+                  </Button>
+                }
+              />
+            )}
+          </Panel>
+        </Collapse>
 
-          <Button type="primary" onClick={this.showVisual}>
-            Display
-          </Button>
-        </div>
         <LineChartVisual data={visualData} />
       </div>
     );
