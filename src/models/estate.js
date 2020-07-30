@@ -1,4 +1,16 @@
-import { query, getGeolocation, changeLight } from '../services/estate';
+import {
+  query,
+  getGeolocation,
+  changeLight,
+  visualize,
+  priceVisual,
+  getCommentList,
+  postComment,
+  getPredictionPrice,
+  searchEstate,
+} from '../services/estate';
+import { result } from 'lodash';
+import moment from 'moment';
 
 export default {
   namespace: 'estate',
@@ -16,6 +28,10 @@ export default {
       lat: 10.77653,
       lng: 106.700981,
     },
+    listComment: [],
+    visualizeObject: {},
+    visualData: [],
+    predictionPrice: null,
   },
 
   // Effect use when call request outside
@@ -25,6 +41,22 @@ export default {
       yield put({
         type: 'save',
         payload: response.result,
+      });
+    },
+
+    *getPriceVisual({ payload }, { call, put }) {
+      const response = yield call(priceVisual, payload);
+      yield put({
+        type: 'saveVisualData',
+        payload: response,
+      });
+    },
+
+    *getVisualize({ payload }, { call, put }) {
+      const response = yield call(visualize);
+      yield put({
+        type: 'saveVisualize',
+        payload: response,
       });
     },
 
@@ -45,6 +77,15 @@ export default {
       });
     },
 
+    *getPredictionPrice({ payload }, { call, put }) {
+      const response = yield call(getPredictionPrice, payload);
+      const price = response.price;
+      yield put({
+        type: 'savePredictPrice',
+        payload: price,
+      });
+    },
+
     *changeLightStatus({ payload }, { call, put }) {
       let lightStatus = [];
       switch (payload) {
@@ -60,10 +101,49 @@ export default {
       }
       const response = yield call(changeLight, lightStatus);
     },
+
+    *postComment({ payload }, { call, put }) {
+      const response = yield call(postComment, payload);
+      yield put({
+        type: 'appendComment',
+        payload: response,
+      });
+    },
+
+    *getListComment({ payload }, { call, put }) {
+      const response = yield call(getCommentList, payload);
+      yield put({
+        type: 'saveCommentList',
+        payload: response,
+      });
+    },
+
+    *search({ payload }, { call, put }) {
+      const response = yield call(searchEstate, payload);
+      yield put({
+        type: 'saveSearch',
+        payload: response,
+      });
+    },
   },
 
   // Reducer use to update props
   reducers: {
+    saveVisualize(state, action) {
+      const response = action.payload;
+      return {
+        ...state,
+        visualizeObject: response,
+      };
+    },
+
+    saveSearch(state, action) {
+      return {
+        ...state,
+        list: action.payload,
+      };
+    },
+
     save(state, action) {
       const response = action.payload;
       return {
@@ -88,6 +168,19 @@ export default {
         popUpShowMap: false,
       };
     },
+
+    saveVisualData(state, action) {
+      const data = Object.entries(action.payload);
+      let rechartData = [];
+      data.forEach(ele => {
+        rechartData.push({ date: moment(ele[0]).format('l'), price: ele[1] });
+      });
+      return {
+        ...state,
+        visualData: rechartData,
+      };
+    },
+
     saveEstate(state, action) {
       return {
         ...state,
@@ -106,6 +199,29 @@ export default {
       return {
         ...state,
         currentCoordinate: action.payload,
+      };
+    },
+
+    saveCommentList(state, action) {
+      return {
+        ...state,
+        listComment: action.payload,
+      };
+    },
+
+    savePredictPrice(state, action) {
+      return {
+        ...state,
+        predictionPrice: action.payload,
+      };
+    },
+
+    appendComment(state, action) {
+      const comments = state.listComment;
+      comments.push(action.payload);
+      return {
+        ...state,
+        listComment: comments,
       };
     },
   },
