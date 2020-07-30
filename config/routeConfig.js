@@ -1,19 +1,31 @@
 export default [
   {
+    path: '/login',
+    component: '../layouts/UserLayout',
+    routes: [
+      {
+        path: '/login',
+        name: 'Login',
+        icon: 'smile',
+        component: './LoginPage',
+      },
+    ],
+  },
+  {
     path: '/',
     component: '../layouts/BasicLayout',
     routes: [
       {
         path: '/',
-        name: 'home',
+        name: 'Home',
         icon: 'smile',
         component: './HomePage',
       },
       {
-        path: '/test',
-        name: 'socket',
+        path: '/visualize',
+        name: 'Real Estate Charts',
         icon: 'smile',
-        component: './TestSocket',
+        component: './Charts',
       },
     ],
   },

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Table, Divider, Tag, Button } from 'antd';
 import MapLocation from '../MapLocation';
 import DetailModal from '../DetailModal';
+import PickLocation from '@/components/PickLocation';
+import SearchBox from '@/components/SearchBox';
 import { connect } from 'dva';
 import style from './index.less';
 
@@ -27,6 +29,12 @@ const columns = (handleShowMap, loadingFetchMap, showDetailEstate) => [
   {
     title: 'Price',
     dataIndex: 'price',
+    key: 'price',
+    render: text => <p>{text}</p>,
+  },
+  {
+    title: 'Unit',
+    dataIndex: 'price_unit',
     key: 'price',
     render: text => <p>{text}</p>,
   },
@@ -73,6 +81,9 @@ export default class HomePage extends Component {
       type: 'estate/getEstate',
       // pagination
       payload: { page: 0, pageSize: 10 },
+    });
+    dispatch({
+      type: 'estate/getVisualize',
     });
   }
 
@@ -134,6 +145,14 @@ export default class HomePage extends Component {
     });
   };
 
+  changeLightStatus = (e, status) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'estate/changeLightStatus',
+      payload: status,
+    });
+  };
+
   render() {
     const { estate, loadingGetData, loadingGetMap } = this.props;
     const {
@@ -144,9 +163,21 @@ export default class HomePage extends Component {
       geoLocation,
       popUpShowDetail,
       currentEstate,
+      visualizeObject,
     } = estate;
     return (
       <div>
+        <div style={{ marginBottom: '20px' }}>
+          <h1>Control light</h1>
+          <Button style={{ marginRight: '20px' }} onClick={e => this.changeLightStatus(e, 1)}>
+            Turn on light
+          </Button>
+          <Button onClick={e => this.changeLightStatus(e, 2)}>Turn off light</Button>
+        </div>
+        <div style={{ marginBottom: '20px' }}>
+          <PickLocation locationData={visualizeObject} />
+        </div>
+        <SearchBox />
         <Table
           columns={columns(this.handleShowMap, loadingGetMap, this.showDetailEstate)}
           dataSource={list}
@@ -157,7 +188,7 @@ export default class HomePage extends Component {
         <MapLocation visible={popUpShowMap} geoLocation={geoLocation} />
         <DetailModal
           visible={popUpShowDetail}
-          estate={currentEstate}
+          currentEstate={currentEstate}
           handleToggleShowDetail={this.handleToggleShowDetail}
         />
       </div>

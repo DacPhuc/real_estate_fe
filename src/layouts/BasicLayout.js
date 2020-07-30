@@ -5,7 +5,7 @@
  */
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { connect } from 'dva';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from '../assets/logo.svg';
 import Authorized from '@/utils/Authorized';
 import { formatMessage } from 'umi-plugin-react/locale';
@@ -18,7 +18,7 @@ import Link from 'umi/link';
  */
 
 const BasicLayout = props => {
-  const { dispatch, children, settings } = props;
+  const { dispatch, children, settings, loadAuthen } = props;
   /**
    * constructor
    */
@@ -27,6 +27,12 @@ const BasicLayout = props => {
   /**
    * init variables
    */
+  useEffect(() => {
+    dispatch &&
+      dispatch({
+        type: 'login/checkAuthentication',
+      });
+  }, []);
 
   const handleMenuCollapse = payload =>
     dispatch &&
@@ -42,6 +48,7 @@ const BasicLayout = props => {
       menuItemRender={(menuItemProps, defaultDom) => {
         return <Link to={menuItemProps.path}>{defaultDom}</Link>;
       }}
+      rightContentRender={rightProps => <RightContent {...rightProps} loadAuthen={loadAuthen} />}
       {...props}
       {...settings}
     >
@@ -50,7 +57,9 @@ const BasicLayout = props => {
   );
 };
 
-export default connect(({ global, settings }) => ({
+export default connect(({ global, settings, login, loading }) => ({
   collapsed: global.collapsed,
   settings,
+  login,
+  loadAuthen: loading.effects['login/checkAuthentication'],
 }))(BasicLayout);
