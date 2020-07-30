@@ -12,11 +12,7 @@ const errorHandler = error => {
 
   if (status === 401) {
     notification.error({
-      message: 'Error 400',
-    });
-    /* eslint-disable no-underscore-dangle */
-    window.g_app._store.dispatch({
-      type: 'login/logout',
+      message: 'Please check your email or password again',
     });
     return;
   }
@@ -44,4 +40,25 @@ const request = extend({
   errorHandler,
   credentials: 'include',
 });
+
+request.interceptors.request.use(async (url, options) => {
+  let token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: 'Bearer ' + 'dacphuc',
+  };
+
+  let Authorization;
+
+  if (token) {
+    headers['Authorization'] = 'Bearer ' + token;
+  }
+
+  return {
+    url: url,
+    options: { ...options, headers: headers },
+  };
+});
+
 export default request;

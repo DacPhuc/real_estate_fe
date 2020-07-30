@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Icon, Tooltip } from 'antd';
+import { Icon, Tooltip, Button } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { connect } from 'dva';
+import { router } from 'umi';
 import HeaderSearch from '../HeaderSearch';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
@@ -9,60 +10,34 @@ import Avatar from './AvatarDropdown';
 
 class GlobalHeaderRight extends Component {
   render() {
-    const { theme, layout } = this.props;
+    const { theme, layout, status, loadAuthen } = this.props;
     let className = styles.right;
 
     if (theme === 'dark' && layout === 'topmenu') {
       className = `${styles.right}  ${styles.dark}`;
     }
 
-    return (
+    return !loadAuthen ? (
       <div className={className}>
-        <HeaderSearch
-          className={`${styles.action} ${styles.search}`}
-          placeholder={formatMessage({
-            id: 'component.globalHeader.search',
-          })}
-          dataSource={[
-            formatMessage({
-              id: 'component.globalHeader.search.example1',
-            }),
-            formatMessage({
-              id: 'component.globalHeader.search.example2',
-            }),
-            formatMessage({
-              id: 'component.globalHeader.search.example3',
-            }),
-          ]}
-          onSearch={value => {
-            console.log('input', value); // tslint:disable-line no-console
-          }}
-          onPressEnter={value => {
-            console.log('enter', value); // tslint:disable-line no-console
-          }}
-        />
-        <Tooltip
-          title={formatMessage({
-            id: 'component.globalHeader.help',
-          })}
-        >
-          <a
-            target="_blank"
-            href="https://pro.ant.design/docs/getting-started"
-            rel="noopener noreferrer"
-            className={styles.action}
+        {status ? null : (
+          <Button
+            type="primary"
+            icon="login"
+            className={styles.login}
+            onClick={() => {
+              router.push('/login');
+            }}
           >
-            <Icon type="question-circle-o" />
-          </a>
-        </Tooltip>
-        <Avatar />
-        <SelectLang className={styles.action} />
+            Sign in
+          </Button>
+        )}
       </div>
-    );
+    ) : null;
   }
 }
 
-export default connect(({ settings }) => ({
+export default connect(({ settings, login }) => ({
+  status: login.status,
   theme: settings.navTheme,
   layout: settings.layout,
 }))(GlobalHeaderRight);
